@@ -1,0 +1,83 @@
+<div class="page-header">
+  <h2>Dashboard</h2>
+  <a routerLink="/billing" class="btn btn-primary">+ New Bill</a>
+</div>
+
+<div *ngIf="loading()" class="text-muted">Loading dashboard...</div>
+
+<ng-container *ngIf="summary() as s">
+  <div class="grid grid-4 mb-4">
+    <div class="card stat-card">
+      <div class="stat-label">Today's Sales</div>
+      <div class="stat-value">₹{{ s.todaySales.total | number: '1.2-2' }}</div>
+      <div class="text-muted">{{ s.todaySales.count }} bill(s)</div>
+    </div>
+    <div class="card stat-card">
+      <div class="stat-label">Monthly Sales</div>
+      <div class="stat-value">₹{{ s.monthlySales.total | number: '1.2-2' }}</div>
+      <div class="text-muted">{{ s.monthlySales.count }} bill(s)</div>
+    </div>
+    <div class="card stat-card">
+      <div class="stat-label">Top Item</div>
+      <div class="stat-value" style="font-size: 18px">{{ s.topSellingItems[0]?.name || '-' }}</div>
+      <div class="text-muted">{{ s.topSellingItems[0]?.totalQty || 0 }} sold</div>
+    </div>
+    <div class="card stat-card">
+      <div class="stat-label">Active Items Tracked</div>
+      <div class="stat-value" style="font-size: 18px">{{ s.topSellingItems.length }}</div>
+      <div class="text-muted">in top-sellers list</div>
+    </div>
+  </div>
+
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-header"><h3>Last 7 Days</h3></div>
+      <div class="trend-chart">
+        <div class="trend-bar-wrap" *ngFor="let d of s.last7DaysTrend">
+          <div class="trend-bar" [style.height]="barHeight(d.total)" [title]="'₹' + d.total"></div>
+          <div class="trend-label">{{ d.day.slice(5) }}</div>
+        </div>
+        <div class="text-muted" *ngIf="!s.last7DaysTrend.length">No sales data yet.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h3>Top Selling Items</h3></div>
+      <div class="table-wrap" *ngIf="s.topSellingItems.length; else noItems">
+        <table>
+          <thead><tr><th>Item</th><th>Qty Sold</th><th>Revenue</th></tr></thead>
+          <tbody>
+            <tr *ngFor="let i of s.topSellingItems">
+              <td>{{ i.name }}</td>
+              <td>{{ i.totalQty }}</td>
+              <td>₹{{ i.totalRevenue | number: '1.2-2' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #noItems><p class="text-muted">No sales yet.</p></ng-template>
+    </div>
+  </div>
+
+  <div class="card mt-4">
+    <div class="card-header">
+      <h3>Recent Bills</h3>
+      <a routerLink="/bills" class="btn btn-secondary btn-sm">View All</a>
+    </div>
+    <div class="table-wrap" *ngIf="s.recentBills.length; else noBills">
+      <table>
+        <thead><tr><th>Bill #</th><th>Customer</th><th>Amount</th><th>Payment</th><th>Date</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let b of s.recentBills">
+            <td>{{ b.bill_number }}</td>
+            <td>{{ b.customer_name || 'Walk-in' }}</td>
+            <td>₹{{ b.total_amount | number: '1.2-2' }}</td>
+            <td><span class="badge badge-info">{{ b.payment_method }}</span></td>
+            <td>{{ b.created_at }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noBills><p class="text-muted">No bills generated yet.</p></ng-template>
+  </div>
+</ng-container>

@@ -1,0 +1,100 @@
+<div class="page-header">
+  <h2>Item Management</h2>
+  <button class="btn btn-primary" (click)="openCreate()">+ Add Item</button>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <input
+      type="text"
+      class="form-control search-input"
+      placeholder="Search by name or item code..."
+      [(ngModel)]="search"
+      (ngModelChange)="onSearchChange()"
+    />
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Tax %</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items()">
+          <td>{{ item.item_code }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.category }}</td>
+          <td>₹{{ item.price | number: '1.2-2' }}</td>
+          <td>{{ item.tax_percent }}%</td>
+          <td>
+            <span class="badge" [class.badge-success]="item.is_available" [class.badge-danger]="!item.is_available">
+              {{ item.is_available ? 'Available' : 'Unavailable' }}
+            </span>
+          </td>
+          <td>
+            <div class="flex gap-2">
+              <button class="btn btn-secondary btn-sm" (click)="openEdit(item)">Edit</button>
+              <button class="btn btn-danger btn-sm" (click)="remove(item)">Delete</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="!loading() && !items().length">
+          <td colspan="7" class="text-muted">No items found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="flex items-center justify-between mt-3">
+    <span class="text-muted">Page {{ page() }} of {{ totalPages() }}</span>
+    <div class="flex gap-2">
+      <button class="btn btn-secondary btn-sm" [disabled]="page() <= 1" (click)="changePage(-1)">Previous</button>
+      <button class="btn btn-secondary btn-sm" [disabled]="page() >= totalPages()" (click)="changePage(1)">Next</button>
+    </div>
+  </div>
+</div>
+
+<!-- Create/Edit Modal -->
+<div class="modal-backdrop" *ngIf="showModal()" (click)="closeModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>{{ editing() ? 'Edit Item' : 'Add Item' }}</h3>
+    <div class="grid grid-2">
+      <div class="form-group">
+        <label class="form-label">Item Code</label>
+        <input class="form-control" [ngModel]="form().itemCode" (ngModelChange)="setField('itemCode', $event)" [disabled]="editing()" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Name</label>
+        <input class="form-control" [ngModel]="form().name" (ngModelChange)="setField('name', $event)" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <input class="form-control" [ngModel]="form().category" (ngModelChange)="setField('category', $event)" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Price</label>
+        <input type="number" class="form-control" [ngModel]="form().price" (ngModelChange)="setField('price', $event)" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tax %</label>
+        <input type="number" class="form-control" [ngModel]="form().taxPercent" (ngModelChange)="setField('taxPercent', $event)" />
+      </div>
+      <div class="form-group flex items-center gap-2" style="margin-top: 22px">
+        <input type="checkbox" id="avail" [ngModel]="form().isAvailable" (ngModelChange)="setField('isAvailable', $event)" />
+        <label for="avail">Available for billing</label>
+      </div>
+    </div>
+    <div class="flex gap-2 justify-between mt-3">
+      <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+      <button class="btn btn-primary" (click)="save()">Save Item</button>
+    </div>
+  </div>
+</div>

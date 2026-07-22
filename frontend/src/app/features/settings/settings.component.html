@@ -1,0 +1,119 @@
+<div class="page-header">
+  <h2>Settings</h2>
+</div>
+
+<div class="tabs mb-4">
+  <button class="tab" [class.active]="activeTab() === 'hotel'" (click)="activeTab.set('hotel')">Hotel Details</button>
+  <button class="tab" [class.active]="activeTab() === 'billing'" (click)="activeTab.set('billing')">Billing & Printer</button>
+  <button class="tab" [class.active]="activeTab() === 'backup'" (click)="activeTab.set('backup')">Backup & Restore</button>
+</div>
+
+<ng-container *ngIf="settings() as s">
+  <!-- Hotel Details -->
+  <div class="card" *ngIf="activeTab() === 'hotel'">
+    <div class="grid grid-2">
+      <div class="form-group">
+        <label class="form-label">Hotel Name</label>
+        <input class="form-control" [ngModel]="s.hotel_name" (ngModelChange)="updateField('hotel_name', $event)" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone</label>
+        <input class="form-control" [ngModel]="s.hotel_phone" (ngModelChange)="updateField('hotel_phone', $event)" />
+      </div>
+      <div class="form-group" style="grid-column: 1 / -1">
+        <label class="form-label">Address</label>
+        <input class="form-control" [ngModel]="s.hotel_address" (ngModelChange)="updateField('hotel_address', $event)" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-control" [ngModel]="s.hotel_email" (ngModelChange)="updateField('hotel_email', $event)" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">GSTIN / Tax ID</label>
+        <input class="form-control" [ngModel]="s.hotel_gstin" (ngModelChange)="updateField('hotel_gstin', $event)" />
+      </div>
+      <div class="form-group" style="grid-column: 1 / -1">
+        <label class="form-label">Logo URL</label>
+        <input class="form-control" placeholder="https://... or /uploads/logo.png" [ngModel]="s.hotel_logo_url" (ngModelChange)="updateField('hotel_logo_url', $event)" />
+        <p class="text-muted mt-2" style="font-size:12px">
+          Upload your logo file to the backend's <code>/uploads</code> folder (or any public URL) and paste the link here.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Billing & Printer -->
+  <div class="card" *ngIf="activeTab() === 'billing'">
+    <div class="grid grid-2">
+      <div class="form-group">
+        <label class="form-label">Currency Symbol</label>
+        <input class="form-control" [ngModel]="s.currency_symbol" (ngModelChange)="updateField('currency_symbol', $event)" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Default Tax %</label>
+        <input type="number" class="form-control" [ngModel]="s.default_tax_percent" (ngModelChange)="updateField('default_tax_percent', $event)" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Invoice Prefix</label>
+        <input class="form-control" [ngModel]="s.invoice_prefix" (ngModelChange)="updateField('invoice_prefix', $event)" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Receipt Paper Size</label>
+        <select class="form-control" [ngModel]="s.receipt_paper_size" (ngModelChange)="updateField('receipt_paper_size', $event)">
+          <option value="80mm">80mm Thermal</option>
+          <option value="A4">A4</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Printer Name</label>
+        <input class="form-control" placeholder="e.g. EPSON TM-T82" [ngModel]="s.printer_name" (ngModelChange)="updateField('printer_name', $event)" />
+      </div>
+      <div class="form-group" style="grid-column: 1 / -1">
+        <label class="form-label">Invoice Footer Note</label>
+        <input class="form-control" [ngModel]="s.invoice_footer_note" (ngModelChange)="updateField('invoice_footer_note', $event)" />
+      </div>
+    </div>
+
+    <div class="notice mt-3">
+      <strong>Email & WhatsApp:</strong> Sender credentials (SMTP, Twilio, or Meta Cloud API keys) are configured via
+      the backend's <code>.env</code> file for security, since they are server-side secrets. See the Installation
+      Guide for the exact variables. Once set, bill and daily-closing notifications are sent automatically.
+    </div>
+  </div>
+
+  <div class="flex justify-between mt-4" *ngIf="activeTab() !== 'backup'">
+    <span></span>
+    <button class="btn btn-primary" [disabled]="saving()" (click)="save()">
+      {{ saving() ? 'Saving...' : 'Save Settings' }}
+    </button>
+  </div>
+
+  <!-- Backup & Restore -->
+  <div class="card" *ngIf="activeTab() === 'backup'">
+    <div class="card-header">
+      <h3>Database Backups</h3>
+      <button class="btn btn-primary btn-sm" [disabled]="backingUp()" (click)="createBackup()">
+        {{ backingUp() ? 'Creating...' : '+ Create Backup Now' }}
+      </button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>File</th><th>Size</th><th>Created</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let b of backups()">
+            <td>{{ b.fileName }}</td>
+            <td>{{ formatSize(b.sizeBytes) }}</td>
+            <td>{{ b.createdAt | date: 'medium' }}</td>
+            <td>
+              <div class="flex gap-2">
+                <button class="btn btn-secondary btn-sm" (click)="downloadBackup(b)">Download</button>
+                <button class="btn btn-danger btn-sm" (click)="restoreBackup(b)">Restore</button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="!backups().length"><td colspan="4" class="text-muted">No backups yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-container>

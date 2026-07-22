@@ -1,0 +1,49 @@
+<div class="receipt" [ngClass]="paperClass">
+  <div class="r-header">
+    <h2>{{ settings?.hotel_name || 'Hotel Name' }}</h2>
+    <p *ngIf="settings?.hotel_address">{{ settings?.hotel_address }}</p>
+    <p *ngIf="settings?.hotel_phone">Ph: {{ settings?.hotel_phone }}</p>
+    <p *ngIf="settings?.hotel_gstin">GSTIN: {{ settings?.hotel_gstin }}</p>
+  </div>
+
+  <div class="r-divider"></div>
+
+  <div class="r-meta">
+    <div><span>Bill No:</span><strong>{{ bill.bill_number }}</strong></div>
+    <div><span>Date:</span><strong>{{ bill.created_at }}</strong></div>
+    <div *ngIf="bill.customer_name"><span>Customer:</span><strong>{{ bill.customer_name }}</strong></div>
+    <div *ngIf="bill.room_number"><span>Room:</span><strong>{{ bill.room_number }}</strong></div>
+    <div><span>Payment:</span><strong>{{ bill.payment_method }}</strong></div>
+  </div>
+
+  <div class="r-divider"></div>
+
+  <table class="r-items">
+    <thead>
+      <tr><th>Item</th><th>Qty</th><th>Rate</th><th>Total</th></tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let li of bill.items">
+        <td>{{ li.item_name }}</td>
+        <td>{{ li.quantity }}</td>
+        <td>{{ li.unit_price | number: '1.2-2' }}</td>
+        <td>{{ li.line_total | number: '1.2-2' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="r-divider"></div>
+
+  <div class="r-totals">
+    <div><span>Subtotal</span><span>₹{{ bill.subtotal | number: '1.2-2' }}</span></div>
+    <div><span>Tax</span><span>₹{{ bill.tax_amount | number: '1.2-2' }}</span></div>
+    <div *ngIf="bill.discount_amount"><span>Discount</span><span>-₹{{ bill.discount_amount | number: '1.2-2' }}</span></div>
+    <div class="r-grand"><span>Total</span><span>₹{{ bill.total_amount | number: '1.2-2' }}</span></div>
+  </div>
+
+  <div class="r-divider"></div>
+
+  <div class="r-footer">
+    <p>{{ settings?.invoice_footer_note || 'Thank you for staying with us!' }}</p>
+  </div>
+</div>

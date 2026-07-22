@@ -1,0 +1,37 @@
+<div class="license-page">
+  <div class="license-card">
+    <div class="license-icon">🔑</div>
+    <h1>Activate Your License</h1>
+
+    <ng-container *ngIf="licenseService.state() as s">
+      <p class="reason text-muted" *ngIf="s.reason">{{ s.reason }}</p>
+      <div class="status-box" *ngIf="s.status === 'TRIAL_ACTIVE'">
+        You're still in your trial period: <strong>{{ s.daysRemaining }}</strong> day(s) and
+        <strong>{{ s.billsRemaining }}</strong> bill(s) remaining.
+      </div>
+    </ng-container>
+
+    <div class="form-group mt-4">
+      <label class="form-label">License Key</label>
+      <input
+        class="form-control"
+        placeholder="HBMS-XXXXXXXXXXXX-XXXXXXXX"
+        [(ngModel)]="licenseKey"
+        [disabled]="!auth.hasRole('ADMIN')"
+      />
+    </div>
+
+    <button class="btn btn-primary btn-block" [disabled]="activating() || !auth.hasRole('ADMIN')" (click)="activate()">
+      {{ activating() ? 'Activating...' : 'Activate License' }}
+    </button>
+
+    <p class="text-muted mt-3" *ngIf="!auth.hasRole('ADMIN')" style="font-size: 12.5px">
+      Only an Administrator can activate the license. Please contact your admin.
+    </p>
+
+    <div class="help-box mt-4">
+      Need a license key? Contact your software vendor/reseller with your hotel name and this
+      device's details. No reinstallation is required - simply paste the key above once received.
+    </div>
+  </div>
+</div>

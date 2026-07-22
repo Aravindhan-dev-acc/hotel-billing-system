@@ -1,0 +1,101 @@
+<div class="page-header">
+  <h2>Reports</h2>
+  <button class="btn btn-secondary" (click)="sendClosingNow()" *ngIf="mode() === 'daily'">
+    📧 Send Daily Closing Summary Now
+  </button>
+</div>
+
+<div class="card mb-4">
+  <div class="tabs">
+    <button class="tab" [class.active]="mode() === 'daily'" (click)="setMode('daily')">Daily</button>
+    <button class="tab" [class.active]="mode() === 'monthly'" (click)="setMode('monthly')">Monthly</button>
+    <button class="tab" [class.active]="mode() === 'yearly'" (click)="setMode('yearly')">Yearly</button>
+    <button class="tab" [class.active]="mode() === 'custom'" (click)="setMode('custom')">Custom Range</button>
+  </div>
+
+  <div class="filter-row mt-3" *ngIf="mode() === 'daily'">
+    <input type="date" class="form-control" [(ngModel)]="date" (ngModelChange)="load()" />
+  </div>
+  <div class="filter-row mt-3" *ngIf="mode() === 'monthly'">
+    <select class="form-control" [(ngModel)]="month" (ngModelChange)="load()">
+      <option *ngFor="let m of months" [value]="m.v">{{ m.l }}</option>
+    </select>
+    <select class="form-control" [(ngModel)]="year" (ngModelChange)="load()">
+      <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+    </select>
+  </div>
+  <div class="filter-row mt-3" *ngIf="mode() === 'yearly'">
+    <select class="form-control" [(ngModel)]="year" (ngModelChange)="load()">
+      <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+    </select>
+  </div>
+  <div class="filter-row mt-3" *ngIf="mode() === 'custom'">
+    <input type="date" class="form-control" [(ngModel)]="customFrom" />
+    <span class="text-muted">to</span>
+    <input type="date" class="form-control" [(ngModel)]="customTo" />
+    <button class="btn btn-primary" (click)="load()">Apply</button>
+  </div>
+</div>
+
+<ng-container *ngIf="report() as r">
+  <div class="grid grid-4 mb-4">
+    <div class="card stat-card"><div class="stat-label">Total Sales</div><div class="stat-value">₹{{ r.totals.total | number: '1.2-2' }}</div></div>
+    <div class="card stat-card"><div class="stat-label">Total Bills</div><div class="stat-value">{{ r.totals.billCount }}</div></div>
+    <div class="card stat-card"><div class="stat-label">Tax Collected</div><div class="stat-value">₹{{ r.totals.tax | number: '1.2-2' }}</div></div>
+    <div class="card stat-card"><div class="stat-label">Discounts Given</div><div class="stat-value">₹{{ r.totals.discount | number: '1.2-2' }}</div></div>
+  </div>
+
+  <div class="grid grid-2 mb-4">
+    <div class="card">
+      <div class="card-header"><h3>By Payment Method</h3></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Method</th><th>Bills</th><th>Total</th></tr></thead>
+          <tbody>
+            <tr *ngFor="let p of r.byPaymentMethod">
+              <td>{{ p.payment_method }}</td><td>{{ p.billCount }}</td><td>₹{{ p.total | number: '1.2-2' }}</td>
+            </tr>
+            <tr *ngIf="!r.byPaymentMethod.length"><td colspan="3" class="text-muted">No data.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>Top Items</h3></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Item</th><th>Qty</th><th>Revenue</th></tr></thead>
+          <tbody>
+            <tr *ngFor="let i of r.topItems">
+              <td>{{ i.name }}</td><td>{{ i.totalQty }}</td><td>₹{{ i.totalRevenue | number: '1.2-2' }}</td>
+            </tr>
+            <tr *ngIf="!r.topItems.length"><td colspan="3" class="text-muted">No data.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Bills in Range ({{ r.range.from }} to {{ r.range.to }})</h3>
+      <button class="btn btn-secondary btn-sm" (click)="exportCsv()">⬇ Export CSV</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Bill #</th><th>Customer</th><th>Amount</th><th>Payment</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let b of r.bills">
+            <td>{{ b.bill_number }}</td>
+            <td>{{ b.customer_name || 'Walk-in' }}</td>
+            <td>₹{{ b.total_amount | number: '1.2-2' }}</td>
+            <td>{{ b.payment_method }}</td>
+            <td>{{ b.payment_status }}</td>
+            <td>{{ b.created_at }}</td>
+          </tr>
+          <tr *ngIf="!r.bills.length"><td colspan="6" class="text-muted">No bills in this range.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-container>

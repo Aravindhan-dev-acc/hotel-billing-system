@@ -1,0 +1,36 @@
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.stat-card { padding: 18px 20px; }
+.stat-label { font-size: 12px; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; }
+.stat-value { font-size: 26px; font-weight: 700; margin-bottom: 2px; }
+
+.trend-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  height: 160px;
+  padding-top: 10px;
+}
+.trend-bar-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+}
+.trend-bar {
+  width: 100%;
+  background: linear-gradient(180deg, var(--color-accent-light), var(--color-accent));
+  border-radius: 4px 4px 0 0;
+  min-height: 4px;
+  transition: height 0.3s ease;
+}
+.trend-label { font-size: 11px; color: var(--color-text-muted); margin-top: 6px; }

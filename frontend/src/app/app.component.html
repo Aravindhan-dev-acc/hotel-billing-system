@@ -1,0 +1,47 @@
+<app-toast></app-toast>
+<ng-container *ngIf="auth.isAuthenticated(); else authOnly">
+  <div class="shell">
+    <aside class="sidebar" [class.open]="sidebarOpen()">
+      <div class="brand">
+        <span class="brand-icon">🏨</span>
+        <span class="brand-text">Hotel Billing</span>
+      </div>
+      <nav class="nav">
+        <a
+          *ngFor="let item of visibleNavItems"
+          [routerLink]="item.path"
+          routerLinkActive="active"
+          class="nav-link"
+          (click)="sidebarOpen.set(false)"
+        >
+          <span class="nav-icon">{{ item.icon }}</span>
+          <span>{{ item.label }}</span>
+        </a>
+      </nav>
+      <div class="user-box">
+        <div class="user-avatar">{{ (auth.currentUser()?.name || '?').charAt(0) }}</div>
+        <div class="user-info">
+          <div class="user-name">{{ auth.currentUser()?.name }}</div>
+          <div class="user-role">{{ auth.currentUser()?.role }}</div>
+        </div>
+        <button class="btn btn-secondary btn-sm" (click)="logout()" title="Logout">⏻</button>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay" *ngIf="sidebarOpen()" (click)="sidebarOpen.set(false)"></div>
+
+    <div class="main">
+      <header class="topbar no-print">
+        <button class="menu-btn" (click)="toggleSidebar()">☰</button>
+        <app-license-banner></app-license-banner>
+      </header>
+      <main class="content">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #authOnly>
+  <router-outlet></router-outlet>
+</ng-template>

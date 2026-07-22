@@ -1,0 +1,66 @@
+<div class="page-header">
+  <h2>User Management</h2>
+  <button class="btn btn-primary" (click)="openCreate()">+ Add User</button>
+</div>
+
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let u of users()">
+          <td>{{ u.name }}</td>
+          <td>{{ u.email }}</td>
+          <td>
+            <select class="form-control" style="width:120px; padding:4px 8px" [ngModel]="u.role" (ngModelChange)="changeRole(u, $event)">
+              <option value="ADMIN">Admin</option>
+              <option value="STAFF">Staff</option>
+              <option value="OWNER">Owner</option>
+            </select>
+          </td>
+          <td>
+            <span class="badge" [class.badge-success]="u.is_active" [class.badge-danger]="!u.is_active">
+              {{ u.is_active ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td>
+            <div class="flex gap-2">
+              <button class="btn btn-secondary btn-sm" (click)="toggleActive(u)">{{ u.is_active ? 'Deactivate' : 'Activate' }}</button>
+              <button class="btn btn-secondary btn-sm" (click)="resetPassword(u)">Reset Password</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal-backdrop" *ngIf="showModal()" (click)="showModal.set(false)">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>Add User</h3>
+    <div class="form-group">
+      <label class="form-label">Name</label>
+      <input class="form-control" [(ngModel)]="newUser.name" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input class="form-control" [(ngModel)]="newUser.email" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input type="password" class="form-control" [(ngModel)]="newUser.password" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Role</label>
+      <select class="form-control" [(ngModel)]="newUser.role">
+        <option value="ADMIN">Admin</option>
+        <option value="STAFF">Staff</option>
+        <option value="OWNER">Owner</option>
+      </select>
+    </div>
+    <div class="flex gap-2 justify-between mt-3">
+      <button class="btn btn-secondary" (click)="showModal.set(false)">Cancel</button>
+      <button class="btn btn-primary" (click)="save()">Create User</button>
+    </div>
+  </div>
+</div>

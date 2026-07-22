@@ -1,0 +1,71 @@
+<div class="no-print">
+  <div class="page-header">
+    <h2>Bill History</h2>
+  </div>
+
+  <div class="card mb-4">
+    <div class="filters grid grid-4">
+      <input class="form-control" placeholder="Search bill #, customer, phone..." [(ngModel)]="search" />
+      <input class="form-control" type="date" [(ngModel)]="from" />
+      <input class="form-control" type="date" [(ngModel)]="to" />
+      <button class="btn btn-primary" (click)="applyFilters()">Filter</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Bill #</th><th>Customer</th><th>Amount</th><th>Payment</th><th>Status</th><th>Date</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let b of bills()">
+            <td>{{ b.bill_number }}</td>
+            <td>{{ b.customer_name || 'Walk-in' }}</td>
+            <td>₹{{ b.total_amount | number: '1.2-2' }}</td>
+            <td><span class="badge badge-info">{{ b.payment_method }}</span></td>
+            <td>
+              <span class="badge"
+                [class.badge-success]="b.payment_status === 'PAID'"
+                [class.badge-danger]="b.payment_status === 'CANCELLED'"
+                [class.badge-warning]="b.payment_status === 'PENDING'">
+                {{ b.payment_status }}
+              </span>
+            </td>
+            <td>{{ b.created_at }}</td>
+            <td>
+              <div class="flex gap-2">
+                <button class="btn btn-secondary btn-sm" (click)="view(b)">View / Print</button>
+                <button
+                  class="btn btn-danger btn-sm"
+                  *ngIf="b.payment_status !== 'CANCELLED' && auth.hasRole('ADMIN','OWNER')"
+                  (click)="cancelBill(b)"
+                >Cancel</button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="!loading() && !bills().length"><td colspan="7" class="text-muted">No bills found.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex items-center justify-between mt-3">
+      <span class="text-muted">Page {{ page() }} of {{ totalPages() }}</span>
+      <div class="flex gap-2">
+        <button class="btn btn-secondary btn-sm" [disabled]="page() <= 1" (click)="changePage(-1)">Previous</button>
+        <button class="btn btn-secondary btn-sm" [disabled]="page() >= totalPages()" (click)="changePage(1)">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View / Reprint overlay -->
+<div class="receipt-overlay" *ngIf="viewingBill()">
+  <div class="receipt-actions no-print">
+    <button class="btn btn-secondary" (click)="closeView()">← Back</button>
+    <button class="btn btn-primary" (click)="printReceipt()">🖨️ Print Receipt</button>
+  </div>
+  <div class="receipt-print-area">
+    <app-receipt [bill]="viewingBill()!" [settings]="settings()"></app-receipt>
+  </div>
+</div>

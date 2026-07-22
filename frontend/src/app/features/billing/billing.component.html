@@ -1,0 +1,110 @@
+<div class="pos-layout no-print" *ngIf="!generatedBill()">
+  <!-- Item search / catalogue -->
+  <div class="card pos-catalogue">
+    <div class="card-header">
+      <h3>Items</h3>
+    </div>
+    <input
+      type="text"
+      class="form-control mb-3"
+      placeholder="Search item by name or code..."
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="search()"
+    />
+    <div class="item-grid">
+      <button class="item-tile" *ngFor="let item of searchResults()" (click)="addToCart(item)">
+        <div class="item-tile-name">{{ item.name }}</div>
+        <div class="item-tile-meta">{{ item.item_code }} · {{ item.category }}</div>
+        <div class="item-tile-price">₹{{ item.price | number: '1.2-2' }}</div>
+      </button>
+      <div class="text-muted" *ngIf="!searchResults().length">No items match your search.</div>
+    </div>
+  </div>
+
+  <!-- Cart / Bill builder -->
+  <div class="card pos-cart">
+    <div class="card-header"><h3>Current Bill</h3></div>
+
+    <div class="table-wrap mb-3">
+      <table>
+        <thead><tr><th>Item</th><th>Qty</th><th>Rate</th><th>Total</th><th></th></tr></thead>
+        <tbody>
+          <tr *ngFor="let line of cart()">
+            <td>{{ line.item.name }}</td>
+            <td>
+              <div class="qty-control">
+                <button class="btn btn-secondary btn-sm" (click)="updateQuantity(line.item.id, line.quantity - 1)">-</button>
+                <input
+                  type="number"
+                  class="qty-input"
+                  [ngModel]="line.quantity"
+                  (ngModelChange)="updateQuantity(line.item.id, +$event)"
+                  min="1"
+                />
+                <button class="btn btn-secondary btn-sm" (click)="updateQuantity(line.item.id, line.quantity + 1)">+</button>
+              </div>
+            </td>
+            <td>₹{{ line.item.price | number: '1.2-2' }}</td>
+            <td>₹{{ (line.item.price * line.quantity) | number: '1.2-2' }}</td>
+            <td><button class="btn btn-danger btn-sm" (click)="removeLine(line.item.id)">✕</button></td>
+          </tr>
+          <tr *ngIf="!cart().length"><td colspan="5" class="text-muted">Cart is empty. Click an item to add it.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid grid-3 mb-3">
+      <div class="form-group">
+        <label class="form-label">Customer Name</label>
+        <input class="form-control" [(ngModel)]="customerName" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone</label>
+        <input class="form-control" [(ngModel)]="customerPhone" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Room No.</label>
+        <input class="form-control" [(ngModel)]="roomNumber" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Discount (₹)</label>
+        <input type="number" class="form-control" [(ngModel)]="discountAmount" min="0" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Payment Method</label>
+        <select class="form-control" [(ngModel)]="paymentMethod">
+          <option value="CASH">Cash</option>
+          <option value="CARD">Card</option>
+          <option value="UPI">UPI</option>
+          <option value="ONLINE">Online</option>
+          <option value="OTHER">Other</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="totals-box">
+      <div><span>Subtotal</span><span>₹{{ subtotal() | number: '1.2-2' }}</span></div>
+      <div><span>Tax</span><span>₹{{ taxTotal() | number: '1.2-2' }}</span></div>
+      <div><span>Discount</span><span>-₹{{ discountAmount | number: '1.2-2' }}</span></div>
+      <div class="grand"><span>Grand Total</span><span>₹{{ grandTotal() | number: '1.2-2' }}</span></div>
+    </div>
+
+    <div class="flex gap-2 mt-3">
+      <button class="btn btn-secondary btn-block" (click)="clearCart()">Clear</button>
+      <button class="btn btn-primary btn-block" [disabled]="submitting() || !cart().length" (click)="generateBill()">
+        {{ submitting() ? 'Generating...' : 'Generate Bill' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Receipt / Print View -->
+<div class="receipt-overlay" *ngIf="generatedBill()">
+  <div class="receipt-actions no-print">
+    <button class="btn btn-secondary" (click)="closeReceipt()">← New Bill</button>
+    <button class="btn btn-primary" (click)="printReceipt()">🖨️ Print Receipt</button>
+  </div>
+  <div class="receipt-print-area">
+    <app-receipt [bill]="generatedBill()!" [settings]="settings()"></app-receipt>
+  </div>
+</div>

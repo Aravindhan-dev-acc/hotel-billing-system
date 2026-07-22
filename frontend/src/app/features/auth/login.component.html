@@ -1,0 +1,47 @@
+<div class="login-page">
+  <div class="login-card">
+    <div class="login-brand">
+      <span class="login-icon">🏨</span>
+      <h1>Hotel Billing</h1>
+      <p class="text-muted">Sign in to manage bills, items, and reports</p>
+    </div>
+
+    <form (ngSubmit)="submit()" #loginForm="ngForm">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input
+          type="email"
+          name="email"
+          class="form-control"
+          [(ngModel)]="email"
+          required
+          autocomplete="username"
+        />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input
+          type="password"
+          name="password"
+          class="form-control"
+          [(ngModel)]="password"
+          required
+          autocomplete="current-password"
+        />
+      </div>
+
+      <div class="form-error mb-3" *ngIf="errorMsg()">{{ errorMsg() }}</div>
+
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="loading() || !loginForm.valid">
+        {{ loading() ? 'Signing in...' : 'Sign In' }}
+      </button>
+    </form>
+
+    <div class="demo-hint">
+      <strong>Demo accounts:</strong>
+      <div>Admin: admin&#64;hotel.com / Admin&#64;123</div>
+      <div>Owner: owner&#64;hotel.com / Owner&#64;123</div>
+      <div>Staff: staff&#64;hotel.com / Staff&#64;123</div>
+    </div>
+  </div>
+</div>
