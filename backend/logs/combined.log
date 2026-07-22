@@ -1,1 +1,33 @@
-
+[2026-07-22 12:34:58] INFO: Database schema verified/created.
+[2026-07-22 12:34:59] INFO: Seeded default users (admin, owner, staff).
+[2026-07-22 12:34:59] INFO: Seeded 12 sample items.
+[2026-07-22 12:34:59] INFO: Seeded trial license record.
+[2026-07-22 12:34:59] INFO: Seed process complete.
+[2026-07-22 12:34:59] INFO: Hotel Billing backend running on http://localhost:5000 [development]
+[2026-07-22 12:34:59] INFO: Daily closing scheduler started (fires at 23:55).
+[2026-07-22 12:37:52] INFO: Database schema verified/created.
+[2026-07-22 12:37:52] INFO: Seed process complete.
+[2026-07-22 12:37:52] INFO: Hotel Billing backend running on http://localhost:5000 [development]
+[2026-07-22 12:37:52] INFO: Daily closing scheduler started (fires at 23:55).
+[2026-07-22 12:38:12] INFO: ::1 - - [22/Jul/2026:07:08:12 +0000] "GET / HTTP/1.1" 404 52 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.129.1 Chrome/148.0.7778.280 Electron/42.6.0 Safari/537.36"
+[2026-07-22 12:38:12] INFO: ::1 - - [22/Jul/2026:07:08:12 +0000] "GET /favicon.ico HTTP/1.1" 404 63 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.129.1 Chrome/148.0.7778.280 Electron/42.6.0 Safari/537.36"
+[2026-07-22 12:44:42] INFO: Database schema verified/created.
+[2026-07-22 12:44:42] INFO: Seed process complete.
+[2026-07-22 12:44:42] INFO: Hotel Billing backend running on http://localhost:5000 [development]
+[2026-07-22 12:44:42] INFO: Daily closing scheduler started (fires at 23:55).
+[2026-07-22 12:45:52] INFO: Database schema verified/created.
+[2026-07-22 12:45:52] INFO: Seed process complete.
+[2026-07-22 12:45:52] INFO: Hotel Billing backend running on http://localhost:5000 [development]
+[2026-07-22 12:45:52] INFO: Daily closing scheduler started (fires at 23:55).
+[2026-07-22 12:46:04] INFO: ::1 - - [22/Jul/2026:07:16:04 +0000] "POST /api/auth/login HTTP/1.1" 200 472 "http://localhost:50967/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.129.1 Chrome/148.0.7778.280 Electron/42.6.0 Safari/537.36"
+[2026-07-22 12:46:04] INFO: ::1 - - [22/Jul/2026:07:16:04 +0000] "GET /api/license/status HTTP/1.1" 200 246 "http://localhost:50967/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.129.1 Chrome/148.0.7778.280 Electron/42.6.0 Safari/537.36"
+[2026-07-22 12:46:04] INFO: ::1 - - [22/Jul/2026:07:16:04 +0000] "GET /api/reports/dashboard HTTP/1.1" 200 155 "http://localhost:50967/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.129.1 Chrome/148.0.7778.280 Electron/42.6.0 Safari/537.36"
+[2026-07-22 12:46:08] INFO: ::1 - - [22/Jul/2026:07:16:08 +0000] "GET /api/license/status HTTP/1.1" 304 - "http://localhost:50967/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.129.1 Chrome/148.0.7778.280 Electron/42.6.0 Safari/537.36"
+[2026-07-22 12:46:08] INFO: ::1 - - [22/Jul/2026:07:16:08 +0000] "GET /api/settings HTTP/1.1" 200 448 "http://localhost:50967/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.129.1 Chrome/148.0.7778.280 Electron/42.6.0 Safari/537.36"
+[2026-07-22 12:46:08] INFO: ::1 - - [22/Jul/2026:07:16:08 +0000] "GET /api/items?availableOnly=true&limit=12 HTTP/1.1" 200 2468 "http://localhost:50967/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.129.1 Chrome/148.0.7778.280 Electron/42.6.0 Safari/537.36"
+[2026-07-22 12:46:14] INFO: ::1 - - [22/Jul/2026:07:16:14 +0000] "GET /api/settings HTTP/1.1" 304 - "http://localhost:50967/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.129.1 Chrome/148.0.7778.280 Electron/42.6.0 Safari/537.36"
+[2026-07-22 12:46:14] INFO: ::1 - - [22/Jul/2026:07:16:14 +0000] "GET /api/bills?page=1&limit=15 HTTP/1.1" 200 86 "http://localhost:50967/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.129.1 Chrome/148.0.7778.280 Electron/42.6.0 Safari/537.36"
+[2026-07-22 12:46:16] INFO: ::1 - - [22/Jul/2026:07:16:16 +0000] "GET /api/items?page=1&limit=15 HTTP/1.1" 200 2468 "http://localhost:50967/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.129.1 Chrome/148.0.7778.280 Electron/42.6.0 Safari/537.36"
+[2026-07-22 12:46:18] INFO: ::1 - - [22/Jul/2026:07:16:18 +0000] "GET /api/reports/daily?date=2026-07-22 HTTP/1.1" 200 199 "http://localhost:50967/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.129.1 Chrome/148.0.7778.280 Electron/42.6.0 Safari/537.36"
+[2026-07-22 12:46:20] INFO: ::1 - - [22/Jul/2026:07:16:20 +0000] "GET /api/items?page=1&limit=15 HTTP/1.1" 304 - "http://localhost:50967/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.129.1 Chrome/148.0.7778.280 Electron/42.6.0 Safari/537.36"
+[2026-07-22 12:46:25] INFO: ::1 - - [22/Jul/2026:07:16:25 +0000] "GET /api/users HTTP/1.1" 200 392 "http://localhost:50967/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.129.1 Chrome/148.0.7778.280 Electron/42.6.0 Safari/537.36"
