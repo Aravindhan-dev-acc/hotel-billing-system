@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Backend runtime data
+backend/data/*.db
+backend/data/*.db-shm
+backend/data/*.db-wal
+backend/backups/*.db
+backend/logs/*.log
+backend/uploads/*
+!backend/uploads/.gitkeep
+backend/.env
+
+# Frontend build output
+frontend/dist/
+frontend/.angular/
+
+# OS/editor
+.DS_Store
+*.swp
