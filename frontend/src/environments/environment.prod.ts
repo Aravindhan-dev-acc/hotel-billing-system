@@ -1,5 +1,4 @@
 export const environment = {
-  production: true,
-  // Replace with your deployed backend URL at build time
-  apiUrl: '/api',
-};
+     production: true,
+     apiUrl: 'https://hotel-billing-system-1.onrender.com/api',
+   };
